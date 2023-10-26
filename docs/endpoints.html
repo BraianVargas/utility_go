@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>apiary.io—404—No Resource Found!</title>
+
+<body>
+    <div id="bg"></div>
+    <div id="message">
+        <h1>The resource you're looking for doesn't exist. <br>Please check the <a
+                href="https://utilitygoapicliente.docs.apiary.io/">API documentation</a> or have a look on available
+            resources below.</h1>
+        <p></p>
+        <ol>
+            <section>
+                <h2>a. Autenticación de Aplicación</h2>
+                <li><b>GET</b> /status</li>
+                <li><b>POST</b> /token</li>
+                <li><b>POST</b> /usuarios_backoffice/token</li>
+            </section>
+            <section>
+                <h2>b. Registración de usuarios</h2>
+                <li><b>POST</b> /usuarios/identificacion</li>
+                <li><b>POST</b> /validaciones/identidad/preguntas</li>
+                <li><b>POST</b> /validaciones/identidad/respuestas</li>
+                <li><b>POST</b> /usuarios</li>
+                <li><b>POST</b> /emails/registro</li>
+                <li><b>POST</b> /usuarios/{usuario_id}/confirmacion</li>
+            </section>
+            <section>
+                <h2>c. Recuperación de contraseña</h2>
+                <li><b>POST</b> /emails/recuperar_password</li>
+                <li><b>POST</b> /usuarios/{usuario_id}/recuperacion_password</li>
+            </section>
+            <section>
+                <h2>d. Autenticación de Usuarios</h2>
+                <li><b>POST</b> /usuarios/login</li>
+                <li><b>POST</b> /usuarios/verificar</li>
+                <li><b>GET</b> /usuarios/recuperacion{?tipo_documento,numero_documento}</li>
+                <li><b>POST</b> /usuarios/recuperacion</li>
+            </section>
+            <section>
+                <h2>e. Usuarios</h2>
+                <li><b>GET</b> /usuarios/{usuario_id}</li>
+                <li><b>PUT</b> /usuarios/{usuario_id}</li>
+                <li><b>PUT</b> /usuarios/{usuario_id}/password</li>
+                <li><b>POST</b> /usuarios/{usuario_id}/baja</li>
+            </section>
+            <section>
+                <h2>f. Asociación Manual de Cuentas</h2>
+                <li><b>GET</b> /cuentas/asociaciones{?usuario_id}{?cuenta_id}{?tipo_documento}{?numero_documento}</li>
+                <li><b>POST</b> /cuentas/asociaciones</li>
+                <li><b>PUT</b> /cuentas/asociaciones</li>
+                <li><b>DELETE</b> /cuentas/asociaciones</li>
+            </section>
+            <section>
+                <h2>g. Cuentas</h2>
+                <li><b>GET</b> /usuarios/{usuario_id}/cuentas_reducidas</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}</li>
+                <li><b>GET</b> /cuentas/documento{?tipo_documento}{?numero_documento}</li>
+                <li><b>PUT</b> /usuarios/{usuario_id}/cuentas/grupos/{grupo_id}</li>
+                <li><b>POST</b> /usuarios/{usuario_id}/cuentas/grupos</li>
+                <li><b>DELETE</b> /usuarios/{usuario_id}/cuentas/grupos</li>
+                <li><b>GET</b> /usuarios/{usuario_id}/cuentas/grupos</li>
+                <li><b>GET</b> /usuarios/{usuario_id}/grupos/{grupo_id}/cuentas</li>
+                <li><b>GET</b> /cuentas{?direccion}{?nro_medidor}{?cuenta_id}</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/puntos_de_servicio</li>
+            </section>
+            <section>
+                <h2>h. Facturas</h2>
+                <li><b>GET</b> /cuentas/{cuenta_id}/facturas</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/facturas/{factura_id}/pdf{?usuario_id}</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/ultima_factura</li>
+                <li><b>GET</b> /facturas/{id_factura}/smart_bill{?usuario_id}</li>
+                <li><b>GET</b> /api/facturas/{id_factura}/escalones_tarifarios</li>
+                <li><b>GET</b> /facturas{?token}</li>
+                <li><b>GET</b> /cuentas/{id_cuenta}/facturas/subconceptos</li>
+                <li><b>POST</b> /facturas/envio_de_mail</li>
+            </section>
+            <section>
+                <h2>i. Consumos</h2>
+                <li><b>GET</b> /cuentas/{cuenta_id}/consumos?periodos={periodos}?usuario_id={usuario_id}</li>
+            </section>
+            <section>
+                <h2>j. Gestion de Deuda y Pagos</h2>
+                <li><b>GET</b> /cuentas/{cuenta_id}/deudas{?usuario_id}</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/pagos/cupon_de_pago?monto={monto}?deuda_id={deuda_id}</li>
+                <li><b>POST</b> /pagos/identificador</li>
+                <li><b>POST</b> /pagos</li>
+                <li><b>GET</b> /pagos{?cuenta_id}</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/saldos</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/deudas/subconceptos{?deuda_id}</li>
+                <li><b>GET</b> /deudas{?usuario_id}{?gateway}{?tipo_documento}{?numero_documento}</li>
+                <li><b>POST</b> /pagos/vouchers/validar</li>
+                <li><b>POST</b> /pagos/vouchers</li>
+                <li><b>DELETE</b> /pagos/vouchers</li>
+                <li><b>GET</b> /pagos/decidir/tarjetas_guardadas?{usuario_id}</li>
+                <li><b>DELETE</b> /pagos/decidir/tarjetas_guardadas</li>
+            </section>
+            <section>
+                <h2>k. Formularios</h2>
+                <li><b>GET</b> /formularios{?cuenta_id}{?tipo_formulario}{?usuario_id}</li>
+                <li><b>POST</b> /formularios/listado</li>
+                <li><b>POST</b> /formularios</li>
+                <li><b>GET</b> /formularios/{formulario_id}</li>
+                <li><b>PUT</b> /formularios/{formulario_id}</li>
+                <li><b>POST</b> /formularios/{formulario_id}/reiteracion</li>
+                <li><b>POST</b> /formularios/{formulario_id}/cancelacion</li>
+                <li><b>POST</b> /formulario/validar</li>
+                <li><b>POST</b> /formulario/actualizar</li>
+            </section>
+            <section>
+                <h2>l. Gestión de acceso a Cuentas</h2>
+                <li><b>POST</b> /cuentas/delegaciones</li>
+                <li><b>GET</b> /cuentas/delegaciones{?usuario_id}{?cuenta_id}</li>
+                <li><b>PUT</b> /cuentas/delegaciones</li>
+                <li><b>DELETE</b> /cuentas/delegaciones</li>
+            </section>
+            <section>
+                <h2>m. Alertas</h2>
+                <li><b>GET</b> /cuentas/{cuenta_id}/alertas</li>
+            </section>
+            <section>
+                <h2>n. Perfil de Notificaciones</h2>
+                <li><b>GET</b> /usuarios/{usuario_id}/notificaciones/perfil</li>
+                <li><b>PUT</b> /usuarios/{usuario_id}/notificaciones/perfil</li>
+                <li><b>GET</b> /usuarios/{usuario_id}/cuentas/{cuenta_id}/notificaciones/perfil</li>
+                <li><b>PUT</b> /usuarios/{usuario_id}/cuentas/{cuenta_id}/notificaciones/perfil</li>
+            </section>
+            <section>
+                <h2>o. Adhesión a factura digital</h2>
+                <li><b>PUT</b> /cuentas/emails_factura_digital</li>
+            </section>
+            <section>
+                <h2>p. Gestión de email de usuario</h2>
+                <li><b>POST</b> /usuarios/{usuario_id}/email</li>
+                <li><b>PUT</b> /usuarios/{usuario_id}/email</li>
+            </section>
+            <section>
+                <h2>q. Plan de pagos</h2>
+                <li><b>POST</b> /plan_de_pagos/viabilidad</li>
+                <li><b>POST</b> /plan_de_pagos/cuotas</li>
+                <li><b>POST</b> /plan_de_pagos</li>
+                <li><b>PUT</b> /plan_de_pagos/{id}/confirmacion</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/plan_de_pagos</li>
+                <li><b>GET</b> /plan_de_pagos/{id}</li>
+                <li><b>PUT</b> /plan_de_pagos/{id}</li>
+                <li><b>DELETE</b> /plan_de_pagos/{id}</li>
+                <li><b>GET</b> /plan_de_pagos/{id}/cupon{?cuenta_id}</li>
+            </section>
+            <section>
+                <h2>r. Emails generales</h2>
+                <li><b>POST</b> /api/registros/emails</li>
+            </section>
+            <section>
+                <h2>s. Smart Consumption</h2>
+                <li><b>GET</b>
+                    /cuentas/{cuenta_id}/consumo_smart/consumos{?anio,periodo,dia,granularidad,fecha_inicio,fecha_fin}
+                </li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/consumo_smart/consumos/ultimos{?cantidad,cantidad_con_dias}</li>
+                <li><b>GET</b> /cuentas/{cuenta_id}/consumo_smart/consumos/estadisticas</li>
+                <li><b>PUT</b> /cuentas/{cuenta_id}/consumo_smart/consumos/objetivo_consumo</li>
+                <li><b>DELETE</b> /cuentas/{cuenta_id}/consumo_smart/consumos/objetivo_consumo</li>
+            </section>
+            <section>
+                <h2>t. Personas</h2>
+                <li><b>GET</b> /personas{?nombre}{?tipo_documento}{?numero_documento}{?persona_id}{?tipo_persona}</li>
+                <li><b>GET</b> /personas/{id}</li>
+                <li><b>PUT</b> /personas/{id}</li>
+                <li><b>GET</b> /personas/{id}/cuentas</li>
+                <li><b>GET</b> /personas/{id}/personas</li>
+                <li><b>POST</b> /personas/{id}/asociaciones</li>
+                <li><b>DELETE</b> /personas/{id}/asociaciones</li>
+            </section>
+            <section>
+                <h2>v. Puntos de servicio</h2>
+                <li><b>GET</b> /puntos_de_servicio{?serie}</li>
+                <li><b>GET</b> /puntos_de_servicio/{id}</li>
+            </section>
+            <section>
+                <h2>w. Novedades</h2>
+                <li><b>GET</b> /novedades{?persona_id}{?cuenta_id}{?punto_de_servicio_id}</li>
+            </section>
+            <section>
+                <h2>x. Consultas</h2>
+                <li><b>GET</b> /url_de_la_consulta/{cuenta_id}</li>
+                <li><b>GET</b> /url_de_la_consulta{?key_1}{?key_2}</li>
+            </section>
+            <section>
+                <h2>z. Configuración</h2>
+                <li><b>GET</b> /configuracion</li>
+            </section>
+            <section>
+                <h2>a1. Validación de email</h2>
+                <li><b>GET</b> /validar_email{?email}</li>
+            </section>
+        </ol>
+    </div>
+</body>
+
+</html>
