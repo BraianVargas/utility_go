@@ -4,6 +4,9 @@
 # ------------------------------------------------------------
 base_url = "https://private-anon-2b0269a880-utilitygoapicliente.apiary-mock.com"
 
+api_key = "miapikey1"
+api_secret = "misecretapikey1" 
+
 headers = {
     'Content-Type': 'application/json',
     'Authorization': 'JWT'
