@@ -2,21 +2,24 @@
 # ------------------------------------------------------------
 # ---------------------- Desarrollo --------------------------
 # ------------------------------------------------------------
-base_url = "https://private-anon-2b0269a880-utilitygoapicliente.apiary-mock.com"
+BASE_URL = "https://private-anon-2b0269a880-utilitygoapicliente.apiary-mock.com"
 
-api_key = "miapikey1"
-api_secret = "misecretapikey1" 
+API_KEY = "A8bRwF2gKt6Qx5YhZ1dU9oDpVlNc7SfM3TnE4jXqLsWvIuP0yGzO"
+SECRET_KEY = "jPm2t7UfZbAeEoGxHvRcW1yDlYi3XuQwS8qOz6Np9LsT5VrKg4MnF"
 
-headers = {
+
+
+HEADERS = {
     'Content-Type': 'application/json',
     'Authorization': 'JWT'
 }
 # -------------- conexion a ddbb ------------
-server_host="192.9.200.9"
-server_port=5000
-server_user="Webesj"
-server_passwd='Web2023'
-server_db='web_esj'
+SERVER_HOST="192.9.200.9"
+SERVER_PORT=5000
+SERVER_USER="Webesj"
+SERVER_PASSWORD='Web2023'
+SERVER_DATABASE='web_esj'
+
 
 
 # ------------------------------------------------------------

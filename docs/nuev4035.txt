@@ -1,0 +1,79 @@
+/****************************************************************************************************************************        
+ SERVIDOR: galatea3 / europa       
+ BASE DE DATOS: web_esj         
+ EFECTOS COLATERALES:         
+ OBSERVACIONES: este sp crea un nuevo usuario con los datos requeridos en el proceso de registracion.
+ Se definio que la registracion "no es federada" (autenticacion con facebook, google, twitter, etc.)
+ Por lo tanto los campos uid y proveedor son nulos.
+ No puede existir mas de un usuario con mismo email y celular.
+ No puede existir masde un usuario con mismo tipo_documento y numero_documento. 
+ 
+*****************************************************************************************************************************/        
+/* 	drop proc web_UserGeneraRegistro */
+
+CREATE PROC web_UserGeneraRegistro 
+@email varchar(80),
+@proveedor varchar(20),
+@uid varchar(5),
+@tipo_documento varchar(10),
+@numero_documento varchar(13),
+@genero varchar(2),
+@password varchar(8),
+@nombre varchar(80),
+@apellido varchar(80),
+@telefono varchar(10),
+@confirmado  varchar(5),
+@perfil_actualizado varchar(5)
+      
+	       
+AS  
+DECLARE @salida varchar(100)
+DECLARE @id_usuario int
+DECLARE @codigo_enviado varchar(4)
+DECLARE @path_foto_usuario varchar(100)
+DECLARE @usuario_activo varchar(1)
+DECLARE @fecha_ingreso_usuario datetime
+DECLARE @cant  int
+
+BEGIN
+	SELECT @salida = ""	
+	SELECT @codigo_enviado = NULL
+	SELECT @path_foto_usuario = NULL
+	SELECT @usuario_activo = "0"
+	SELECT @uid = NULL
+	SELECT @proveedor = NULL
+	SELECT @genero = NULL
+	SELECT @confirmado = "FALSE"
+	SELECT @perfil_actualizado = "TRUE"
+	SELECT @fecha_ingreso_usuario = GETDATE()
+	
+	IF EXISTS (SELECT 1 FROM web_usuarios WHERE email = @email OR numero_tel_celular = @telefono)
+		SELECT @salida = "Usuario ya registrado."
+		
+	IF EXISTS (SELECT 1 FROM web_usuarios WHERE tipo_documento = @tipo_documento AND numero_documento = @numero_documento)
+		SELECT @salida = "Usuario ya registrado."
+	
+	IF @salida = ""
+		BEGIN
+			SELECT @cant = COUNT(*) FROM web_usuarios
+			IF @cant  > 0
+				SELECT @id_usuario = MAX(id_usuario) + 1 FROM web_usuarios
+			ELSE 
+				SELECT @id_usuario = 1
+			
+			INSERT web_usuarios
+			VALUES (@id_usuario,@nombre,@apellido,@tipo_documento,@numero_documento,@telefono,@email,@password,@codigo_enviado,@path_foto_usuario,@usuario_activo,@uid,@proveedor,@genero,@confirmado,@perfil_actualizado,@fecha_ingreso_usuario) 
+			
+			SELECT @salida = CONVERT(VARCHAR(10),id_usuario) 
+			FROM web_usuarios 
+			WHERE tipo_documento = @tipo_documento 
+			AND numero_documento = @numero_documento
+			
+			SELECT @salida usuario_id
+			
+		END
+	ELSE		
+		SELECT @salida message
+
+END
+

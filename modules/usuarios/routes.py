@@ -1,19 +1,19 @@
-from modules.auth import authBP
-from flask import Flask, jsonify, request, send_file
+from modules import *
+from modules.usuarios import usuariosBP
+from modules.usuarios import usuariosBP
+from modules.op_comunes import *
+
 from .controller import *
 from data.env_data import *
 
+
 import requests
+@usuariosBP.before_request
+def verifica_token_middleware():
+    token = requests.headers['Authorization'].split(' ')[1]
+    valida_token(token)
+    
 
-@authBP.route('/register', methods=['GET', 'POST'])
+@usuariosBP.route('/registrar', methods=['GET', 'POST'])
 def registra_usuario():
-    response = requests.post(f'{base_url}/token', data={"api_key":api_key, "api_secret": api_secret}, headers=headers)
-    print(response.json())
-    return jsonify(
-        {
-            "status_code":response.status_code,
-            "headers":response.headers,
-            "data":response.json()
-        }
-    )
-
+    print("# Se va a registrar el usuario")
