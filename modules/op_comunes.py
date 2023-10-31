@@ -1,14 +1,22 @@
 from flask import jsonify, session
 import jwt
+from jwt import exceptions, encode, decode
 from datetime import datetime, timedelta
 
 from data.env_data import *
 
-def genera_token(data:dict):
-    expiracion = datetime.utcnow() + timedelta(hours=24)
-    token = jwt.encode({**data, "expiracion": expiracion.timestamp()}, data['api_secret'], algorithm='HS256')
-    tiempo_faltante = int((expiracion - datetime.utcnow()).total_seconds())
 
+def genera_token(data:dict):
+    def expire_date(time:int):
+        now = datetime.now() 
+        new_date = now + timedelta(hours=time)
+        return new_date
+    token = encode(
+        payload={**data, "expiracion": expire_date(24).timestamp()},
+        key= data['api_secret'], 
+        algorithm='HS256')
+    expiracion = expire_date(24)
+    tiempo_faltante = int((expiracion - datetime.now()).total_seconds())
     response = {
         "token": token,
         "expiracion": tiempo_faltante
@@ -35,7 +43,14 @@ def verifica_headers(_headers):
 
 def valida_token(token, output=False):
     try:
-        if output == True:
-            return jwt.decode(token,key=SECRET_KEY, algorithm='HS256')
-    except:
-        return jsonify({"mensaje": "Credenciales inválidas"}),401
+        if output:
+            response = decode(token,key=SECRET_KEY, algorithms='HS256')
+            return response
+    except exceptions.DecodeError:
+        response = jsonify({"mensaje": "Credenciales inválidas"})
+        response.status_code = 401
+        return response
+    except exceptions.ExpiredSignatureError:
+        response = jsonify({"mensaje": "Credenciales inválidas"})
+        response.status_code = 401
+        return response
