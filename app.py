@@ -12,8 +12,6 @@ app = Flask(__name__)
 # ------------------------------------------------------------
 #            REGISTRO DE BLUEPRINTS 
 # ------------------------------------------------------------
-# _dbConnection = connectSybase()
-
 CORS(app)
 app.register_blueprint(tokenBP, url_prefix='/token')
 app.register_blueprint(usuariosBP, url_prefix='/usuarios')
