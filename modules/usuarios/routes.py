@@ -23,7 +23,7 @@ def verifica_token_middleware():
 
 # --------- B.1 verificar. ----------
 @usuariosBP.route('/identificacion', methods=['POST'])
-def registra_usuario():
+def identificacion():
     values = request.get_json()
     method_name = 'web_UserVerificaIdentificacion'
     response = ejec_store_procedure(method_name, [values['email'],values['proveedor'],values['uid']], ["message"])
@@ -31,3 +31,16 @@ def registra_usuario():
         return jsonify(response),422
     else:
         return jsonify(),200
+
+
+# ----------- D.2 verificar --------------
+@usuariosBP.route('/verificar', methods=['POST'])
+def verifica_usuario():
+    values = request.get_json()
+    method_name = 'web_UserVerificaExistencia'
+    response = ejec_store_procedure(method_name, [values['email'], values['telefono'], values['proveedor'], values['uid']], ["usuario_id", "email", "confirmado"])
+
+    if len(response) == 1:
+        return jsonify({"mensaje": response['usuario_id']}), 404
+    else:
+        return jsonify({k: response[k] for k in ["usuario_id", "email", "confirmado"]}), 200

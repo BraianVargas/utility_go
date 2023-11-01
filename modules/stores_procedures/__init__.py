@@ -18,3 +18,4 @@ def ejec_store_procedure(method_name, params, output_list):
         return None
     salida = diccionario(output_list,response)
     return(salida[0])
+
