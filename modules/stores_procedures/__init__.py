@@ -6,7 +6,14 @@ def diccionario(output_list, responses):
 def formarSP(metodo, parametros):
     sp = metodo
     if parametros:
-        sp += ' "' + '","'.join(str(p).lstrip('&') for p in parametros) + '"'
+        param_strings = []
+        for p in parametros:
+            if isinstance(p, int):
+                param_strings.append(str(p))
+            else:
+                param_strings.append(f'"{p}"')
+        sp += ' ' + ','.join(param_strings)
+    print(sp)
     return sp
 
 def ejec_store_procedure(method_name, params, output_list):

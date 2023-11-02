@@ -20,27 +20,52 @@ def verifica_token_middleware():
     else:
         pass
     
-
-# --------- B.1 verificar. ----------
+#
+# --------- B1. verificar. ----------
+#
 @usuariosBP.route('/identificacion', methods=['POST'])
 def identificacion():
     values = request.get_json()
     method_name = 'web_UserVerificaIdentificacion'
-    response = ejec_store_procedure(method_name, [values['email'],values['proveedor'],values['uid']], ["message"])
+    params=list(values.values())
+    response = ejec_store_procedure(method_name, params, ["message"])
     if response['message']=="Usuario ya registrado.":
         return jsonify(response),422
     else:
         return jsonify(),200
 
-
-# ----------- D.2 verificar --------------
+#
+# ----------- D2. verificar --------------
+#
 @usuariosBP.route('/verificar', methods=['POST'])
 def verifica_usuario():
     values = request.get_json()
     method_name = 'web_UserVerificaExistencia'
-    response = ejec_store_procedure(method_name, [values['email'], values['telefono'], values['proveedor'], values['uid']], ["usuario_id", "email", "confirmado"])
+
+# [values["email"],values["telefono"],values["proveedor"],values["uid"]]
+
+    params=list(values.values())
+    print(params)
+    response = ejec_store_procedure(method_name, params, ["usuario_id", "email", "confirmado"])
+
 
     if len(response) == 1:
         return jsonify({"mensaje": response['usuario_id']}), 404
     else:
         return jsonify({k: response[k] for k in ["usuario_id", "email", "confirmado"]}), 200
+
+#
+# ----------- B4. Generar --------------
+#
+@usuariosBP.route('/', methods=['POST'])
+def generar_usuario():
+    values = request.get_json()
+    method_name = 'web_UserGeneraRegistro'
+    params = [int(values[k]) if isinstance(values[k], bool) else values[k] for k in values.keys()]
+    response = ejec_store_procedure(method_name, params, ["usuario_id"])
+    print(response)
+    if len(response) == 1:
+        return jsonify({"mensaje": response['usuario_id']}), 404
+    else:
+        return jsonify({k: response[k] for k in ["usuario_id", "email", "confirmado"]}), 200
+
