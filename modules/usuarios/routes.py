@@ -63,9 +63,8 @@ def generar_usuario():
     method_name = 'web_UserGeneraRegistro'
     params = [int(values[k]) if isinstance(values[k], bool) else values[k] for k in values.keys()]
     response = ejec_store_procedure(method_name, params, ["usuario_id"])
-    print(response)
-    if len(response) == 1:
+    try:
+        return jsonify({"usuario_id":int(response['usuario_id'])}), 200
+    except:
         return jsonify({"mensaje": response['usuario_id']}), 404
-    else:
-        return jsonify({k: response[k] for k in ["usuario_id", "email", "confirmado"]}), 200
 

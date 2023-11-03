@@ -13,7 +13,6 @@ def formarSP(metodo, parametros):
             else:
                 param_strings.append(f'"{p}"')
         sp += ' ' + ','.join(param_strings)
-    print(sp)
     return sp
 
 def ejec_store_procedure(method_name, params, output_list):
