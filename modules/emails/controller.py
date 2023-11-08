@@ -18,7 +18,7 @@ def envia_mail_codigo(destinatario, codigo):
     <body>
         <p>Estimad@:</p>
         <p>Use el siguiente código de verificación para confirmar su cuenta:</p>
-        <p style="font-size:46px; text-align:center; margin:auto; padding:1em;"><strong>{codigo}</strong></p>
+        <p style="font-size:46px; margin-left:8em; padding:2em;"><strong>{codigo}</strong></p>
         <p>Este es un paso importante del proceso de registración.</p>
         <p>Saludos Cordiales.</p>
         <img src="cid:image" style="width: 100px;">

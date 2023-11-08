@@ -1,7 +1,7 @@
-from modules.token import tokenBP
+from modules.auth.token import tokenBP
 from flask import Flask, jsonify, request, send_file
 from .controller import *
-from ..op_comunes import *
+from ...op_comunes import *
 
 import requests, json
 
