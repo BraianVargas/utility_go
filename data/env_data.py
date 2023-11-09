@@ -14,12 +14,6 @@ HEADERS = {
     'Authorization': 'JWT'
 }
 # -------------- conexion a ddbb ------------
-SERVER_HOST="***.***.***.***"
-SERVER_PORT=5000
-SERVER_USER="Webesj"
-SERVER_PASSWORD='usuario'
-SERVER_DATABASE='contraseña'
-
 
 
 # ------------------------------------------------------------
