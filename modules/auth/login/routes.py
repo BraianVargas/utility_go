@@ -35,7 +35,7 @@ def login():
     method_name = "web_UserIngresaLogin"
     params = [values[k] for k in values.keys()]
     outputs = ["usuario_id","confirmado","perfil_actualizado"]
-    response = ejec_store_procedure(method_name, params, outputs)
+    response = ejec_store_procedure(method_name, params, outputs)[0]
     if len(response) == 1:
         return jsonify({"mensaje":response['usuario_id']}),401
     else:

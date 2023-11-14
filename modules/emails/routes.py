@@ -27,7 +27,7 @@ def generar_usuario():
     values = request.get_json()
     method_name = 'web_UserEnviaCodVerificacion'
     params = [values[k] for k in values.keys()]
-    response = ejec_store_procedure(method_name, params, ["mensaje"])
+    response = ejec_store_procedure(method_name, params, ["mensaje"])[0]
     try:
         if (values['email'] in response['mensaje']):
             status = envia_mail_codigo(values['email'],values['codigo_verificacion'])

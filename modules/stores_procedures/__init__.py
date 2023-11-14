@@ -1,7 +1,10 @@
 from data.sybase_connect import connectSybase
 
-def diccionario(output_list, responses):
-    return [dict(zip(output_list, map(str, dato))) for dato in responses]
+def diccionario_1(output_list,responses):
+    return_list = []
+    for response in responses:
+        return_list.append(dict(zip(output_list, map(str, response))))
+    return return_list
 
 def formarSP(metodo, parametros):
     sp = metodo
@@ -20,8 +23,9 @@ def ejec_store_procedure(method_name, params, output_list):
     cnx.autocommit = True
     procedimiento = formarSP(method_name, params)
     response = cnx.execute(procedimiento)
+    response = (response.fetchall())
     if not response:
         return None
-    salida = diccionario(output_list,response)
-    return(salida[0])
+    salida = diccionario_1(output_list,response)
+    return(salida)
 

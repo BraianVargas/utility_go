@@ -22,83 +22,16 @@ def verifica_token_middleware():
         pass
 
 #
-# --------- E1. Mostrar ----------
+# ------------- F3. Actualizar (alias de usuario) --------------
 #
-@perfilBP.route('/<string:usuario_id>',methods=["GET"])
-def mostrar_perfil(usuario_id):
-    method_name = "web_UserMuestraPerfil"
-    params = [usuario_id]
-    outputs=["email","uid","proveedor","nombre","apellido","alias","genero","tipo_documento","numero_documento","telefono","perfil_actualizado","confirmado"]
-    response = ejec_store_procedure(method_name, params, outputs)
-    if len(response)>1:
-        response = jsonify(response)
-        response.headers['Authorization'] = 'JWT'
-        return (response),200
-    else:
-        response = jsonify({"mensaje":response['email']})
-        response.headers['Authorization'] = 'JWT'
-        return (response),404
-    
-#
-# --------- E3. Actualizar (contraseña) ----------
-#
-@perfilBP.route('/<string:usuario_id>/password',methods=["PUT"])
-def update_password(usuario_id):
-    method_name = "web_UserCambiaPassword"
+@perfilBP.route('/asociasiones',methods=['PUT'])
+def actualiza_alias():
     values = request.get_json()
+    method_name='web_UserActualizaAliasSum'
     params = [values[k] for k in values.keys()]
-    params.insert(0,usuario_id)
-    outputs=["mensaje"]
-    response = ejec_store_procedure(method_name, params, outputs)
-    if ("incorrecta" not in response):
-        response = jsonify(response)
-        response.headers['Authorization'] = 'JWT'
-        return (response),200
-    else:
-        response = jsonify(response)
-        response.headers['Authorization'] = 'JWT'
-        return (response),404
-    
-
-#
-# --------- E4. Iniciar (Baja de usuarios)----------
-#
-@perfilBP.route('/<string:usuario_id>/baja',methods=["POST"])
-def baja_usuario(usuario_id):
-    method_name='web_UserBaja'
-    params = [usuario_id]
     outputs = ['mensaje']
     try:
-        response = ejec_store_procedure(method_name, params, outputs)
-    except:
-        return jsonify({"error": "Ha ocurrido un error en la consulta, reintente"}),500
-    
-    if ("inició el proceso" in response['mensaje']):
-        response = jsonify(response)
-        response.headers["Authorization"] = 'JWT'
-        return response,200
-    else:
-        if ("error" not in response["mensaje"]):
-            response = jsonify({"error": response['mensaje']})
-            response.headers["Authorization"] = 'JWT'
-            return response,404
-        else:
-            response = jsonify({"error": response['mensaje']})
-            response.headers["Authorization"] = 'JWT'
-            return response,422
-
-#
-# --------- E2. Actualizar (Perfil de usuarios)----------
-#
-@perfilBP.route('/<string:usuario_id>',methods=["PUT"])
-def actualiza_usuario(usuario_id):
-    values = request.get_json()
-    method_name='web_UserActualizaPerfil'
-    params = [int(values[k]) if isinstance(values[k], bool) else values[k] for k in values.keys()]
-    params.insert(0,usuario_id)
-    outputs = ['mensaje']
-    try:
-        response = ejec_store_procedure(method_name, params, outputs)
+        response = ejec_store_procedure(method_name, params, outputs)[0]
     except:
         return jsonify({"error": "Ha ocurrido un error en la consulta, reintente"}),500
     if ("correctamente" in response['mensaje']):
@@ -106,11 +39,29 @@ def actualiza_usuario(usuario_id):
         response.headers["Authorization"] = 'JWT'
         return response,200
     else:
-        if ("inexistente" in response["mensaje"]):
-            response = jsonify(response)
+        response = jsonify(response)
+        response.headers["Authorization"] = 'JWT'
+        return response,404
+
+#
+# ------------- F1. Obtener (cuentas) --------------
+#
+@perfilBP.route('/asociasiones',methods=['GET'])
+def obtener_cuentas():
+    values = request.args.to_dict()
+    method_name='web_UserObtieneCuentas'
+    params = [values[k] for k in values.keys()]
+    outputs = ['cuenta_id','titular','direccion']
+    response = ejec_store_procedure(method_name, params, outputs)
+    
+    if "no existe" in response[0]['cuenta_id'] or "No existen" in response[0]['cuenta_id'] :
+        response = jsonify({"mensaje":response[0]['cuenta_id']})
+        response.headers["Authorization"] = 'JWT'
+        return response, 404
+    else:
+        if "ya existe" in response[0]['cuenta_id']:
+            response = jsonify({"mensaje":response[0]['cuenta_id']})
             response.headers["Authorization"] = 'JWT'
-            return response,404
+            return response, 422
         else:
-            response = jsonify({"error": response['mensaje']})
-            response.headers["Authorization"] = 'JWT'
-            return response,422
+            return response

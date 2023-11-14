@@ -33,7 +33,7 @@ def identificacion():
     values = request.get_json()
     method_name = 'web_UserVerificaIdentificacion'
     params=list(values.values())
-    response = ejec_store_procedure(method_name, params, ["message"])
+    response = ejec_store_procedure(method_name, params, ["message"])[0]
     if response['message']=="Usuario ya registrado.":
         return jsonify(response),422
     else:
@@ -51,7 +51,7 @@ def verifica_usuario():
 
     params=list(values.values())
     print(params)
-    response = ejec_store_procedure(method_name, params, ["usuario_id", "email", "confirmado"])
+    response = ejec_store_procedure(method_name, params, ["usuario_id", "email", "confirmado"])[0]
 
 
     if len(response) == 1:
@@ -67,7 +67,7 @@ def generar_usuario():
     values = request.get_json()
     method_name = 'web_UserGeneraRegistro'
     params = [int(values[k]) if isinstance(values[k], bool) else values[k] for k in values.keys()]
-    response = ejec_store_procedure(method_name, params, ["usuario_id"])
+    response = ejec_store_procedure(method_name, params, ["usuario_id"])[0]
     try:
         return jsonify({"usuario_id":int(response['usuario_id'])}), 200
     except:
@@ -82,7 +82,7 @@ def confirmacion_usuario(usuario_id):
     method_name = "web_UserConfirmaRegistracion"
     params = [usuario_id]
     params.append(values[k] for k in values.keys())
-    response = ejec_store_procedure(method_name, params, ['mensaje'])
+    response = ejec_store_procedure(method_name, params, ['mensaje'])[0]
     if response['mensaje'] == ' ':
         return jsonify(),200
     else:
@@ -99,7 +99,7 @@ def forgot_password(usuario_id):
     values = request.get_json()
     method_name = "web_UserGeneraNuevaPassword"
     params = [usuario_id,values['password'],values['token']]
-    response = ejec_store_procedure(method_name, params, ['mensaje'])
+    response = ejec_store_procedure(method_name, params, ['mensaje'])[0]
     if "actualizada" in response['mensaje']:
         return jsonify(response),200
     else:
@@ -114,7 +114,7 @@ def recupera_usuario():
     method_name = "web_UserObtieneMail"
     params = [values[k] for k in values.keys()]
     outputs=["usuario_id","email","proveedor"]
-    response = ejec_store_procedure(method_name, params, outputs)
+    response = ejec_store_procedure(method_name, params, outputs)[0]
     if len(response)>1:
         response = jsonify(response)
         response.headers['Authorization'] = 'JWT'
@@ -123,4 +123,99 @@ def recupera_usuario():
         response = jsonify({"mensaje":response['usuario_id']})
         response.headers['Authorization'] = 'JWT'
         return (response),404
+
+
+#
+# --------- E1. Mostrar ----------
+#
+@usuariosBP.route('/<string:usuario_id>',methods=["GET"])
+def mostrar_perfil(usuario_id):
+    method_name = "web_UserMuestraPerfil"
+    params = [usuario_id]
+    outputs=["email","uid","proveedor","nombre","apellido","alias","genero","tipo_documento","numero_documento","telefono","perfil_actualizado","confirmado"]
+    response = ejec_store_procedure(method_name, params, outputs)[0]
+    if len(response)>1:
+        response = jsonify(response)
+        response.headers['Authorization'] = 'JWT'
+        return (response),200
+    else:
+        response = jsonify({"mensaje":response['email']})
+        response.headers['Authorization'] = 'JWT'
+        return (response),404
     
+#
+# --------- E3. Actualizar (contraseña) ----------
+#
+@usuariosBP.route('/<string:usuario_id>/password',methods=["PUT"])
+def update_password(usuario_id):
+    method_name = "web_UserCambiaPassword"
+    values = request.get_json()
+    params = [values[k] for k in values.keys()]
+    params.insert(0,usuario_id)
+    outputs=["mensaje"]
+    response = ejec_store_procedure(method_name, params, outputs)[0]
+    if ("incorrecta" not in response):
+        response = jsonify(response)
+        response.headers['Authorization'] = 'JWT'
+        return (response),200
+    else:
+        response = jsonify(response)
+        response.headers['Authorization'] = 'JWT'
+        return (response),404
+    
+
+#
+# --------- E4. Iniciar (Baja de usuarios)----------
+#
+@usuariosBP.route('/<string:usuario_id>/baja',methods=["POST"])
+def baja_usuario(usuario_id):
+    method_name='web_UserBaja'
+    params = [usuario_id]
+    outputs = ['mensaje']
+    try:
+        response = ejec_store_procedure(method_name, params, outputs)[0]
+    except:
+        return jsonify({"error": "Ha ocurrido un error en la consulta, reintente"}),500
+    
+    if ("inició el proceso" in response['mensaje']):
+        response = jsonify(response)
+        response.headers["Authorization"] = 'JWT'
+        return response,200
+    else:
+        if ("error" not in response["mensaje"]):
+            response = jsonify({"error": response['mensaje']})
+            response.headers["Authorization"] = 'JWT'
+            return response,404
+        else:
+            response = jsonify({"error": response['mensaje']})
+            response.headers["Authorization"] = 'JWT'
+            return response,422
+
+#
+# --------- E2. Actualizar (Perfil de usuarios)----------
+#
+@usuariosBP.route('/<string:usuario_id>',methods=["PUT"])
+def actualiza_usuario(usuario_id):
+    values = request.get_json()
+    method_name='web_UserActualizaPerfil'
+    params = [int(values[k]) if isinstance(values[k], bool) else values[k] for k in values.keys()]
+    params.insert(0,usuario_id)
+    outputs = ['mensaje']
+    try:
+        response = ejec_store_procedure(method_name, params, outputs)[0]
+    except:
+        return jsonify({"error": "Ha ocurrido un error en la consulta, reintente"}),500
+    if ("correctamente" in response['mensaje']):
+        response = jsonify(response)
+        response.headers["Authorization"] = 'JWT'
+        return response,200
+    else:
+        if ("inexistente" in response["mensaje"]):
+            response = jsonify(response)
+            response.headers["Authorization"] = 'JWT'
+            return response,404
+        else:
+            response = jsonify({"error": response['mensaje']})
+            response.headers["Authorization"] = 'JWT'
+            return response,422
+        
