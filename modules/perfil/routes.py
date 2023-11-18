@@ -1,4 +1,4 @@
-from flask import request, jsonify, wrappers
+from flask import request, jsonify, wrappers, abort
 
 from modules.perfil import *
 from modules.stores_procedures import *
@@ -24,7 +24,7 @@ def verifica_token_middleware():
 #
 # ------------- F3. Actualizar (alias de usuario) --------------
 #
-@perfilBP.route('/asociasiones',methods=['PUT'])
+@perfilBP.route('/asociaciones',methods=['PUT'])
 def actualiza_alias():
     values = request.get_json()
     method_name='web_UserActualizaAliasSum'
@@ -46,7 +46,7 @@ def actualiza_alias():
 #
 # ------------- F1. Obtener (cuentas) --------------
 #
-@perfilBP.route('/asociasiones',methods=['GET'])
+@perfilBP.route('/asociaciones',methods=['GET'])
 def obtener_cuentas():
     values = request.args.to_dict()
     method_name='web_UserObtieneCuentas'
@@ -65,3 +65,29 @@ def obtener_cuentas():
             return response, 422
         else:
             return response
+
+#
+# ------------- F2. Asociar (cuentas) --------------
+#
+
+@perfilBP.route('/asociaciones', methods=['post'])
+def asocia_cuentas():
+    try:
+        values = request.get_json()
+        method_name = 'web_UserAsociaCuentas'
+        params = [values['usuario_id']]
+        outputs = ['cuenta_id', 'direccion', 'cuenta_asociada', 'mensaje']
+        cuentas = values.get('cuentas', [])
+        final_response = []
+
+        for cuenta in cuentas:
+            params.extend(str(cuenta.get(key, '')) if cuenta.get(key) is not None else '' for key in cuenta)
+            response = ejec_store_procedure(method_name, params, outputs)
+            final_response.append(response[0])
+            params[1:] = []
+
+        return jsonify(final_response), 200
+
+    except Exception as e:
+        mensaje_error = "Hubo un error al procesar la asociación de cuentas. Por favor, inténtelo nuevamente más tarde."
+        abort(422, description=mensaje_error)
