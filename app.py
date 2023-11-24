@@ -8,6 +8,7 @@ from modules.auth.login import *
 from modules.usuarios import *
 from modules.perfil import *
 from modules.emails import *
+from modules.cuentas import *
 
 
 app = Flask(__name__)
@@ -18,8 +19,9 @@ app = Flask(__name__)
 CORS(app)
 app.register_blueprint(tokenBP, url_prefix='/token')
 app.register_blueprint(usuariosBP, url_prefix='/usuarios')
-app.register_blueprint(perfilBP, url_prefix='/cuentas')
 app.register_blueprint(loginBP, url_prefix='/usuarios')
+app.register_blueprint(cuentasBP, url_prefix='/cuentas')
+app.register_blueprint(perfilBP, url_prefix='/cuentas')
 app.register_blueprint(emailBP, url_prefix='/emails')
 
 app.config['CORS_HEADERS'] = 'Content-Type'

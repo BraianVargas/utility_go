@@ -3,6 +3,11 @@ from data.sybase_connect import connectSybase
 def diccionario_1(output_list,responses):
     return_list = []
     for response in responses:
+        for i in range(len(response)):
+            try:
+                response[i] = bool(response[i]) if response[i] in (0,1) else response[i]
+            except:
+                pass
         return_list.append(dict(zip(output_list, map(str, response))))
     return return_list
 

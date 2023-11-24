@@ -219,3 +219,20 @@ def actualiza_usuario(usuario_id):
             response.headers["Authorization"] = 'JWT'
             return response,422
         
+#
+# ---------------- G1. LISTAR CUENTAS ----------------
+#
+@usuariosBP.route('/<string:usuario_id>/cuentas_reducidas', methods=['GET'])
+def listar_cuentas(usuario_id):
+    try:
+        method_name = 'web_UserListaCuentas'
+        params= [usuario_id]
+        outputs = ["cuenta_id","adherido_debito_automatico","adherido_factura_digital""tarifa","tarifa_normalizada","medidor_inteligente","premium","titular","direccion","localidad","descripcion_estado","estado","partido","alias""relacion","perfil","codigo_segmentacion_electrica","grupos"]
+        response = ejec_store_procedure(method_name, params, outputs)
+        if len(response[0])>1:
+            return jsonify(response),200
+        else:
+            return jsonify({"mensaje":response[0]['cuenta_id']}),404
+    except:
+        return jsonify({"error":"Hubo un problema al ejecutar 'Listar cuentas'."}),500
+

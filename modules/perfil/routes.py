@@ -67,7 +67,7 @@ def obtener_cuentas():
             return response
 
 #
-# ------------- F2. Asociar (cuentas) --------------
+# ------------- F2. Asociar (suministros) --------------
 #
 
 @perfilBP.route('/asociaciones', methods=['post'])
@@ -91,3 +91,23 @@ def asocia_cuentas():
     except Exception as e:
         mensaje_error = "Hubo un error al procesar la asociación de cuentas. Por favor, inténtelo nuevamente más tarde."
         abort(422, description=mensaje_error)
+
+
+
+#
+# ------------- F4. Desasociar (Suministros) --------------
+#
+@perfilBP.route('/asociaciones', methods=['DELETE'])
+def desasocia_cuenta():
+    try:
+        values = request.get_json()
+        method_name = "web_UserDesasociarCuentas"
+        params = [values[k] for k in values.keys()]
+        outputs = ["mensaje"]
+        response = ejec_store_procedure(method_name, params, outputs)[0]
+        if "inexistente" not in response['mensaje']:
+            return jsonify(response),200
+        else:
+            return jsonify(response),404
+    except:
+        return jsonify({"error":"Error interno de servidor. Metodo: Desasociar Cuentas."}),500
