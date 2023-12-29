@@ -1,5 +1,6 @@
 import string, secrets
 from datetime import datetime, timedelta
+import jwt
 from jwt import encode
 from data.env_data import *
 
